@@ -1,4 +1,4 @@
-setwd("~/Downloads") #setting working directory
+setwd("~/diabetes-Final-project") #setting working directory
 diabetesdata<-read.table("adults-with-diabetes-per-100-lghc-indicator-23.csv", sep =",",header=TRUE)
 #loading in my diabetes dataset I chose
 library(ggplot2) #opening ggplot library
@@ -7,6 +7,20 @@ library(ggplot2) #opening ggplot library
 age.diabetes<-diabetesdata[diabetesdata$Strata=="Age", ]
 #indexing age column from the diabetes dataset to make a dataset that shows different age groups from 2012-2018
 
+education.diabetes<-diabetesdata[diabetesdata$Strata=="Education",]
+#indexing education column from the diabetes dataset to make a dataset that shows different age groups from 2012-2018
+
+race.diabetes<-diabetesdata[diabetesdata$Strata=="Race-Ethnicity",]
+##indexing race column from the diabetes dataset to make a dataset that shows different age groups from 2012-2018
+
+income.diabetes<-diabetesdata[diabetesdata$Strata=="Income",]
+#indexing income column from the diabetes dataset to make a dataset that shows adulta with different level of income from 2012-2018
+
+gender.diabetes<-diabetesdata[diabetesdata$Strata=="Sex", ]
+#indexing gender column from the diabetes dataset to make a dataset that shows gender from 2012-2018
+
+totalpop.diabetes<-diabetesdata[diabetesdata$Strata=="Total population",]
+#indexing total population column from the diabetes dataset to make a dataset that shows total population from 2012-2018
 
 risk.percent<-rep(NA,length=length(age.diabetes$Strata.Name)) #to fill in the empty NA with columns in risk.age
 risk.age<-data.frame( #to add coloumns
@@ -28,11 +42,15 @@ for(i in 2012:2018){
 }
 #a for loop was done to caculate the relative risk for in age group through 2012 to 2018
 
+#Figure 1
+pdf("relative.risk.age.pdf",width=7,height = 7) #creating a pdf
 ggplot(risk.age,aes(x=Year,y=Percent,type=Age,group,fill=Age))+ #plotting bar graph of percent vs. year based on age groups
   geom_bar(stat="summary", fun.y="mean") + #ploting mean of prevalence of diabetes in each age group
   theme(legend.title = element_text(size=10),legend.text=element_text(size=10))+ #making the title in legend bigger
   ggtitle("The Relative Risk of Diabetes based on different age groups") #adding title
  
+dev.off() #closing this file
+
 
 risk2.percent<-rep(NA,length=length(education.diabetes$Strata.Name)) #to fill in empty NA with coloumns in risk.education
 risk.education<-data.frame( #to add coloumns
@@ -53,14 +71,16 @@ for(i in 2012:2018){
 }
 #a for loop was done to caculate the relative risk for in each level of education through 2012 to 2018
 
-
+#Figure 2
+pdf("relative.risk.education.pdf",width = 7,height=7) #creating a pdf 
 ggplot(risk.education,aes(x=Year,y=Percent,type=Education,group,fill=Education))+ #plotting bar graph of percent vs. year based on level of education
   geom_bar(stat="summary", fun.y="mean") + #ploting mean of prevalence of diabetes in each level of education
   theme(legend.title = element_text(size=10),legend.text=element_text(size=10)) +
   ggtitle("The Relative Risk of Diabetes based on the level of education an adult has") #adding title
-  
+ dev.off()#closing this file 
 
-risk3.percent<-rep(NA,length=length(income.diabetes$Strata.Name)) #to fill in empty NA with coloumns in risk.income
+
+ risk3.percent<-rep(NA,length=length(income.diabetes$Strata.Name)) #to fill in empty NA with coloumns in risk.income
 risk.income<-data.frame( #to add coloumns
   Income=income.diabetes$Strata.Name, #adding column name income
   Percent=risk3.percent, #adding column name percent
@@ -79,10 +99,15 @@ for (i in 2012:2018) {
 }
 #a for loop was done to caculate the relative risk for in each level of income through 2012 to 2018
 
+
+#Figure 3
+pdf("relative.risk.income.pdf",width = 7,height=7) #creating pdf
 ggplot(risk.income,aes(x=Year,y=Percent,type=Income,group,fill=Income))+ #plotting bar graph of percent vs. year based on level of education
   geom_bar(stat="summary", fun.y="mean") + #ploting mean of prevalence of diabetes in each level of education
   theme(legend.title = element_text(size=10),legend.text=element_text(size=10)) +
   ggtitle("The Relative Risk of Diabetes based on the level of income an adult has") #adding title
+dev.off()#clsoing this file
+
 
 risk4.percent<-rep(NA,length=length(race.diabetes$Strata.Name)) #to fill in empty NA with coloumns in risk.race
 risk.race<-data.frame( #to add coloumns
@@ -103,10 +128,15 @@ for (i in 2012:2018) {
 }
 #a for loop was done to caculate the relative risk for in each level of income through 2012 to 2018
 
+
+#Figure 4
+pdf("relative.risk.race.pdf",width=7,height=7) #creating pdf file
 ggplot(risk.race,aes(x=Year,y=Percent,type=Race,fill=Race))+ #plotting bar graph of percent vs. year based on level of education
   geom_bar(stat="summary",fun.y="mean") + #ploting mean of prevalence of diabetes in each level of education
   theme(legend.title = element_text(size=10),legend.text=element_text(size=10)) +
   ggtitle("The Relative Risk of Diabetes based on each ethnicity") #adding title
+dev.off()#closing this file
+
 
 risk5.percent<-rep(NA,length=length(gender.diabetes$Strata.Name)) #to fill in empty NA with coloumns in risk.gender
 risk.gender<-data.frame( #to add coloumns
@@ -127,56 +157,56 @@ for (i in 2012:2018) {
 }
 #a for loop was done to caculate the relative risk in each gender through 2012 to 2018
 
+
+#Figure 5
+pdf("relative.risk.gender.pdf",width=7,height = 7)#creating a pdf
 ggplot(risk.gender,aes(x=Year,y=Percent,type=Gender,group,fill=Gender))+ #plotting bar graph of percent vs. year based on level of education
   geom_bar(stat="summary", fun.y="mean") + #ploting mean of prevalence of diabetes in each level of education
   theme(legend.title = element_text(size=10),legend.text=element_text(size=10)) +
   ggtitle("The Relative Risk of Diabetes based on gender") #adding title
+dev.off()#closing this file
 
-
-A<-ggplot(age.diabetes,aes(x=Year,y=Percent,type=Strata.Name,color=Strata.Name))+geom_line() +
-  ggtitle("Number of Adults with Diagnosed Diabetes Per 100 based on Age") +
-  geom_line(data=totalpop.diabetes, aes(x=Year,y=Percent),color="black")
-A+scale_colour_discrete("Age groups") +
-  theme(legend.title = element_text(size=10),
-        legend.text = element_text(size=10))
-
-
-race.diabetes<-diabetesdata[diabetesdata$Strata=="Race-Ethnicity",]
-##indexing race column from the diabetes dataset to make a dataset that shows different age groups from 2012-2018
-
-ggplot(race.diabetes,aes(x=Year,y=Percent,type=Strata.Name,color=Strata.Name))+geom_line() + #plotting line graph
-  ggtitle("Number of Adults with Diagnosed Diabetes Per 100 based on Race") + #adding title
-  geom_line(data=totalpop.diabetes, aes(x=Year,y=Percent),color="black") + #ploting total population
-  scale_colour_discrete("ethnicities") +
-  theme(legend.title = element_text(size=10), #changing legend title size
-        legend.text = element_text(size=10)) #changing legend text size 
-
-
-
-
-education.diabetes<-diabetesdata[diabetesdata$Strata=="Education",]
-##indexing education column from the diabetes dataset to make a dataset that shows different age groups from 2012-2018
-
-ggplot(education.diabetes,aes(x=Year,y=Percent,type=Strata.Name,color=Strata.Name))+geom_line() + #plotting the line graph
-  ggtitle("Number of Adults with Diagnosed Diabetes Per 100 based on Education") + #adding title
-  geom_line(data=totalpop.diabetes, aes(x=Year,y=Percent),color="black") + #adding total population line
-  scale_colour_discrete("Level of Education") + 
+#Figure 6
+pdf("prevalence.age.pdf",width = 7,height=7) #creating a pdf
+A<-ggplot(age.diabetes,aes(x=Year,y=Percent,type=Strata.Name,color=Strata.Name))+geom_line() + #creating a line graph from age.diabetes 
+  ggtitle("Number of Adults with Diagnosed Diabetes Per 100 based on Age") + #adding title
+  geom_line(data=totalpop.diabetes, aes(x=Year,y=Percent),color="black") #adding total population line
+A+scale_colour_discrete("Age groups") + #changing title of legend
   theme(legend.title = element_text(size=10), #making legend title bigger
         legend.text = element_text(size=10)) #making legend text bigger
+dev.off()#closing this file
 
-totalpop.diabetes<-diabetesdata[diabetesdata$Strata=="Total population",]
-#indexing total population column from the diabetes dataset to make a dataset that shows total population from 2012-2018
 
-income.diabetes<-diabetesdata[diabetesdata$Strata=="Income",]
-#indexing income column from the diabetes dataset to make a dataset that shows adulta with different level of income from 2012-2018
-ggplot(income.diabetes,aes(x=Year,y=Percent,type=Strata.Name,color=Strata.Name))+geom_line() + #plotting the linge graph
+#Figure 7
+pdf("prevalence.race.pdf",width = 7,height=7) #creating a pdf
+ggplot(race.diabetes,aes(x=Year,y=Percent,type=Strata.Name,color=Strata.Name))+geom_line() + #plotting line graph from race.diabetes
+  ggtitle("Number of Adults with Diagnosed Diabetes Per 100 based on Race") + #adding title
+  geom_line(data=totalpop.diabetes, aes(x=Year,y=Percent),color="black") + #ploting total population
+  scale_colour_discrete("ethnicities") + #changing legend title
+  theme(legend.title = element_text(size=10), #changing legend title size
+        legend.text = element_text(size=10)) #changing legend text size 
+dev.off()#closing this file
+
+
+#Figure 8
+pdf("prevalence.education.pdf",width=7,height=7)#creating a pdf
+ggplot(education.diabetes,aes(x=Year,y=Percent,type=Strata.Name,color=Strata.Name))+geom_line() + #plotting the line graph from education.diabetes
+  ggtitle("Number of Adults with Diagnosed Diabetes Per 100 based on Education") + #adding title
+  geom_line(data=totalpop.diabetes, aes(x=Year,y=Percent),color="black") + #adding total population line
+  scale_colour_discrete("Level of Education") + #changing legend title
+  theme(legend.title = element_text(size=10), #making legend title bigger
+        legend.text = element_text(size=10)) #making legend text bigger
+dev.off()#closing this file
+
+
+#Figure 9
+pdf("prevalence.income.pdf",width=7,height = 7) #creating a pdf
+ggplot(income.diabetes,aes(x=Year,y=Percent,type=Strata.Name,color=Strata.Name))+geom_line() + #plotting the linge graph from income.diabetes
   ggtitle("Number of Adults with Diagnosed Diabetes Per 100 based on Income") + #adding title
   geom_line(data=totalpop.diabetes, aes(x=Year,y=Percent),color="black") + #adding the total population
-  scale_colour_discrete("Income") 
+  scale_colour_discrete("Income") #changing the legend title
   theme(legend.title = element_text(size=10), #making legend title bigger
         legend.text = element_text(size=10)) #making legend title bigger
-
-gender.diabetes<-diabetesdata[diabetesdata$Strata=="Sex", ]
-##indexing gender column from the diabetes dataset to make a dataset that shows gender from 2012-2018
+dev.off()#closing this file
 
 
